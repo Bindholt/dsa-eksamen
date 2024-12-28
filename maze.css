@@ -1,0 +1,70 @@
+
+
+#grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols)1fr);
+    grid-template-rows: repeat(var(--grid-rows),1fr);
+    gap: 0;
+}
+
+#maze > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell {
+    border: 1px dotted lightgrey;
+    aspect-ratio: 1/1;
+    width: 2em;
+    background-color: rgb(250, 250, 250);
+    box-sizing: border-box;
+}
+
+.north {
+    border-top: 1px solid black;
+}
+
+.south {
+    border-bottom: 1px solid black;
+}
+
+.west {
+    border-left: 1px solid black;
+}
+
+.east {
+    border-right: 1px solid black;
+}
+
+.visited {
+    background-color: lightblue;
+}
+
+.start {
+    background-color: green;
+}
+
+.goal {
+    background-color: red;
+}
+
+.path {
+    background-color: plum;
+}
+
+
+.flex {
+    display: flex;
+    flex-direction: column;
+    height: 1em;
+    width: 10em; 
+    gap: 0.5em;
+}
+
+button {
+    width: 7em;
+    align-self: flex-end;    
+}
+
+
