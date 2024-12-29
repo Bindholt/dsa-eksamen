@@ -38,25 +38,50 @@ export default class Lattice2DGraph {
         return this.nodes.get(`${x},${y}`);
     }
 
-    getNeighbours(node) {
+    getRandomNode() {
+        const x = Math.floor(Math.random() * this.cols);
+        const y = Math.floor(Math.random() * this.rows);
+        return this.nodes.get(`${x},${y}`);
+    }
+
+    getNeighbours({x,y}) {
         const neighbours = [];
         const directions = {
-            left: [-1,0],
-            right: [1,0],
-            up: [0,-1],
-            down: [0,1]
+            left: {dx: -1, dy: 0},
+            right: {dx: 1, dy: 0},
+            up: {dx: 0, dy: -1},
+            down: {dx: 0, dy: 1}
         }
 
         for (const direction in directions) {
-            const [dx, dy] = directions[direction];
-            const x = node.x + dx;
-            const y = node.y + dy;
+            const {dx, dy} = directions[direction];
+            const x = x + dx;
+            const y = y + dy;
             if (x >= 0 && x < this.cols && y >= 0 && y < this.rows) {
                 neighbours.push(this.nodes.get(`${x},${y}`));
             }
         }
 
         return neighbours;
+    }
+
+    getRandomNeighbour({x,y}) {
+        const directions = [
+            {dx: -1, dy: 0},
+            {dx: 1, dy: 0},
+            {dx: 0, dy: -1},
+            {dx: 0, dy: 1}
+        ];
+
+        const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+        const x = x + randomDirection.dx;
+        const y = y + randomDirection.dy;
+
+        if (x >= 0 && x < this.cols && y >= 0 && y < this.rows) {
+            return this.nodes.get(`${x},${y}`);
+        } else {
+            return null;
+        }
     }
 
     getNodeNeighbors(nodeId) {
