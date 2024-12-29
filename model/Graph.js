@@ -10,7 +10,6 @@ export default class Lattice2DGraph {
         this.nodes = new Map();
         this.edges = new Map();
         this.createNodes();
-        this.createEdges();
     }
 
     createNodes() {
@@ -28,7 +27,16 @@ export default class Lattice2DGraph {
             this.edges.set(node.id, neighbours);
         }
     }
+
+    createEdge(nodeId, neighbourId) {
+        const neighbours = this.edges.get(nodeId);
+        neighbours.push(neighbourId);
+        this.edges.set(nodeId, neighbours);
+    }
     
+    getNode(x, y) {
+        return this.nodes.get(`${x},${y}`);
+    }
 
     getNeighbours(node) {
         const neighbours = [];
