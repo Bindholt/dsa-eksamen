@@ -103,7 +103,13 @@ async function finalizeWalk(path, unvisited) {
 }
 /* ----------------- WILSONS ALGORITHM END --------------- */ 
 
+/* ----------------- A* ALGORITHM START --------------- */
+//todo: implement a* algorithm
+/* ----------------- A* ALGORITHM END --------------- */
 
+/* ----------------- BFS ALGORITHM START --------------- */
+//todo: implement bfs algorithm
+/* ----------------- BFS ALGORITHM END --------------- */
 
 /* ----------------- HELPERS START --------------- */ 
 
