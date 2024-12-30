@@ -67,4 +67,10 @@ button {
     align-self: flex-end;    
 }
 
+.partOfMaze {
+    background-color: lightgrey;
+}
 
+.partOfWalk {
+    background-color: lightblue;
+}

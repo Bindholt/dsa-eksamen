@@ -10,7 +10,7 @@ function renderMaze(graph) {
         for (let col = 0; col < cols; col++) {
             const cellDiv = document.createElement("div");
             const cell = graph.getNode(col, row); 
-            cellDiv.id = cell.id;
+            cellDiv.id = "id" + cell.id.replace(",", "-");
             updateCell(graph, cell, cellDiv);
 
             rowDiv.appendChild(cellDiv);
@@ -20,9 +20,11 @@ function renderMaze(graph) {
 }
 
 function updateMaze(graph, updatedCells) {
-    for (const { row, col } of updatedCells) {
+    console.log("updateMaze");
+    console.log(updatedCells);
+    for (const { y:row, x:col } of updatedCells) {
         const cell = graph.getNode(col, row); 
-        const cellDiv = document.querySelector("#" + cell.id); 
+        const cellDiv = document.querySelector("#id" + cell.id.replace(",", "-")); 
         if (cellDiv) {
             updateCell(graph, cell, cellDiv);
         }
@@ -42,6 +44,9 @@ function updateCell(graph, cell, cellDiv) {
 
     cellDiv.className = "cell";
 
+    if(cell.partOfMaze) cellDiv.classList.add("partOfMaze");
+    if(cell.partOfWalk) cellDiv.classList.add("partOfWalk");
+
     if (!cellEdges) {
         cellDiv.classList.add(...directions.map(d => d.name));
     } else {
@@ -52,7 +57,7 @@ function updateCell(graph, cell, cellDiv) {
             if (neighborCol >= 0 && neighborCol < graph.cols && 
                 neighborRow >= 0 && neighborRow < graph.rows) {
                 const neighbor = graph.getNode(neighborCol, neighborRow);
-                if (!cellEdges.includes(neighbor)) {
+                if (!cellEdges.includes(neighbor.id)) {
                     cellDiv.classList.add(d.name);
                 }
             } else {
@@ -62,4 +67,12 @@ function updateCell(graph, cell, cellDiv) {
     }
 }
 
-export { renderMaze };
+function attatchEventListeners() {
+    document.querySelector("#generate").addEventListener("click", () => {
+        const rows = document.querySelector("#rows").value;
+        const cols = document.querySelector("#cols").value;
+        controller.initGraph(rows, cols);
+    });
+}
+
+export { renderMaze, updateMaze, attatchEventListeners };

@@ -26,6 +26,22 @@ export default class Stack {
         return node.data;
     }
 
+    eraseWalkLoop(target) {
+        let current = this.head;
+        const originalSize = this.size;
+        while (current && current.data !== target) {
+            current = current.next;
+            this.size--;
+        }
+
+        if(!current) {
+            this.size = originalSize;
+            return;
+        }
+
+        this.head = current;
+    }
+
     getSize() {
         return this.size;
     }

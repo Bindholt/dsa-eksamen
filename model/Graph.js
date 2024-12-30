@@ -29,9 +29,12 @@ export default class Lattice2DGraph {
     }
 
     createEdge(nodeId, neighbourId) {
-        const neighbours = this.edges.get(nodeId);
-        neighbours.push(neighbourId);
-        this.edges.set(nodeId, neighbours);
+        let neighbours = this.edges.get(nodeId);
+        if (!neighbours) {
+            neighbours = [];  // Initialize as an empty array if no neighbors exist.
+            this.edges.set(nodeId, neighbours);
+        }
+        neighbours.push(neighbourId);  // Add the neighbor to the array.
     }
     
     getNode(x, y) {
@@ -55,34 +58,37 @@ export default class Lattice2DGraph {
 
         for (const direction in directions) {
             const {dx, dy} = directions[direction];
-            const x = x + dx;
-            const y = y + dy;
-            if (x >= 0 && x < this.cols && y >= 0 && y < this.rows) {
-                neighbours.push(this.nodes.get(`${x},${y}`));
+            const neighbourX = x + dx;
+            const neighbourY = y + dy;
+            if (neighbourX >= 0 && neighbourX < this.cols && neighbourY >= 0 && neighbourY < this.rows) {
+                neighbours.push(this.nodes.get(`${neighbourX},${neighbourY}`));
             }
         }
 
         return neighbours;
     }
 
-    getRandomNeighbour({x,y}) {
+    getRandomNeighbour(x, y) {
         const directions = [
             {dx: -1, dy: 0},
             {dx: 1, dy: 0},
             {dx: 0, dy: -1},
             {dx: 0, dy: 1}
         ];
-
-        const randomDirection = directions[Math.floor(Math.random() * directions.length)];
-        const x = x + randomDirection.dx;
-        const y = y + randomDirection.dy;
-
-        if (x >= 0 && x < this.cols && y >= 0 && y < this.rows) {
-            return this.nodes.get(`${x},${y}`);
-        } else {
-            return null;
-        }
+    
+        const validDirections = directions.filter(({dx, dy}) => {
+            const neighbourX = x + dx;
+            const neighbourY = y + dy;
+            return neighbourX >= 0 && neighbourX < this.cols && neighbourY >= 0 && neighbourY < this.rows;
+        });
+    
+        const randomDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
+        const neighbourX = x + randomDirection.dx;
+        const neighbourY = y + randomDirection.dy;
+    
+        return this.nodes.get(`${neighbourX},${neighbourY}`);
     }
+    
 
     getNodeNeighbors(nodeId) {
         return this.edges.get(nodeId);
@@ -107,9 +113,13 @@ class Node {
     id;
     x;
     y;
+    partOfWalk;
+    partOfMaze;
     constructor(x, y) {
         this.id = `${x},${y}`;  
         this.x = x;
         this.y = y;
+        this.partOfWalk = false;
+        this.partOfMaze = false;
     }
 }
