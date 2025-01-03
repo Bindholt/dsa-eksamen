@@ -11,7 +11,6 @@ const changedCells = new Set();
 function main() {
     view.attatchEventListeners();
     window.wilsonsAlgorithm = wilsonsAlgorithm;
-    window.graph = graph;
 }
 
 async function initGraph(rows, cols) {
@@ -20,6 +19,18 @@ async function initGraph(rows, cols) {
     await wilsonsAlgorithm();
     setStartAndGoal();
     view.setButtonsDisabled(false);
+    window.graph = graph;
+    window.PriorityQueue = PriorityQueue;
+}
+
+function changeWeight(node) {
+    if(node.weight < 3) {
+        node.weight++;
+    } else {
+        node.weight = 1;
+    }
+
+    view.updateWeight(node);
 }
 
 /* ----------------- WILSONS ALGORITHM START --------------- */ 
@@ -136,20 +147,20 @@ async function reconstructPath(cameFrom, current) {
 async function aStar(start, goal, heuristic) {
     const openSet = new PriorityQueue();
     start.fScore = heuristic(start, goal);
-    openSet.insert(start);
+    openSet.insert({node: start, priority: start.fScore});
 
     const cameFrom = new Map();
 
-    let cycles = 0;
+    let explorationCost = 0;
     while(openSet.size > 0) {
-        const current = openSet.remove();
+        const current = openSet.remove().node;
         current.partOfSearch = true;
         changedCells.add(current);
         updateMaze();
         await sleep(50);
 
-        cycles++;
-        view.updateAStarCycles(cycles);
+        explorationCost += current.weight;
+        view.updateAStarExplorationCost(explorationCost);
 
         if(current === goal) {
             return reconstructPath(cameFrom, current);
@@ -164,7 +175,7 @@ async function aStar(start, goal, heuristic) {
                 neighbour.fScore = neighbour.gScore + heuristic(neighbour, goal);
                 
                 if(!openSet.contains(neighbour)) {
-                    openSet.insert(neighbour);
+                    openSet.insert({node: neighbour, priority: neighbour.fScore});
                 }
             }
         }
@@ -181,7 +192,6 @@ function manhattanDistance(node, goal) {
 /* ----------------- A* ALGORITHM END --------------- */
 
 /* ----------------- BFS ALGORITHM START --------------- */
-//todo: implement bfs algorithm
 
 async function solveBFS() {
     reset();
@@ -195,7 +205,7 @@ async function BFS(current, goal) {
     queue.add(current);
     const cameFrom = new Map();
 
-    let cycles = 0;
+    let explorationCost = 0;
     while(queue.size() > 0) {
         current = queue.dequeue();
         current.partOfSearch = true;
@@ -203,8 +213,8 @@ async function BFS(current, goal) {
         updateMaze();
         await sleep(50);
 
-        cycles++;
-        view.updateBFSCycles(cycles);
+        explorationCost += current.weight;
+        view.updateBFSExplorationCost(explorationCost);
         if(current === goal) {
             console.log("Goal found!");
             return reconstructPath(cameFrom, current);
@@ -283,4 +293,4 @@ function reset() {
 
 /* ----------------- HELPERS END --------------- */
 
-export {initGraph, solveAStar, solveBFS};
+export {initGraph, solveAStar, solveBFS, changeWeight};

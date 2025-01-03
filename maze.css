@@ -14,7 +14,7 @@
 }
 
 .cell {
-    border: 1px dotted lightgrey;
+    border: 1px dotted rgb(158, 158, 158);
     aspect-ratio: 1/1;
     width: 2em;
     background-color: rgb(250, 250, 250);
@@ -92,4 +92,12 @@ button {
     background-color: rgb(234, 234, 234);
     padding-left: 0.5em;
 
+}
+
+.cell-weight {
+    position: relative;
+    font-size: 0.5em;
+    text-align: right;
+    bottom: 0;
+    right: 0;
 }

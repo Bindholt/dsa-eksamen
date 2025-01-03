@@ -42,7 +42,7 @@ export default class MinHeap {
         let current = this.size-1;
         let parent = this.parentIndex(current);
 
-        while(current > 0 && this.heap[current] < this.heap[parent]) {
+        while(current > 0 && this.heap[current].priority < this.heap[parent].priority) {
             this.swap(current, parent);
             current = parent;
             parent = this.parentIndex(current);
@@ -57,13 +57,13 @@ export default class MinHeap {
         while(leftChild < this.size) {
             let smallestChild;
 
-            if(rightChild < this.size && this.heap[rightChild] < this.heap[leftChild]) {
+            if(rightChild < this.size && this.heap[rightChild].priority < this.heap[leftChild].priority) {
                 smallestChild = rightChild;
             } else {
                 smallestChild = leftChild;
             }
 
-            if(this.heap[smallestChild] < this.heap[current]) {
+            if(this.heap[smallestChild].priority < this.heap[current].priority) {
                 this.swap(smallestChild, current);
                 current = smallestChild;
                 leftChild = this.leftChildIndex(current);
