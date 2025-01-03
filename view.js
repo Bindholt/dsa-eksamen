@@ -29,6 +29,14 @@ function updateMaze(graph, updatedCells) {
     }
 }
 
+function updateAStarCycles(cycles) {
+    document.querySelector("#a-star-cycles").textContent = "Cycles: " + cycles;
+}
+
+function updateBFSCycles(cycles) {
+    document.querySelector("#bfs-cycles").textContent = "Cycles: " + cycles;
+}
+
 function updateCell(graph, cell, cellDiv) {
     const directions = [
         { name: 'north', col: 0, row: -1 },
@@ -44,6 +52,8 @@ function updateCell(graph, cell, cellDiv) {
 
     if(cell.partOfMaze) cellDiv.classList.add("partOfMaze");
     if(cell.partOfWalk) cellDiv.classList.add("partOfWalk");
+    if(cell.partOfSearch) cellDiv.classList.add("partOfSearch");
+    if(cell.partOfPath) cellDiv.classList.add("partOfPath");
     if(cell.start) cellDiv.classList.add("start");
     if(cell.goal) cellDiv.classList.add("goal");
 
@@ -69,10 +79,25 @@ function updateCell(graph, cell, cellDiv) {
 
 function attatchEventListeners() {
     document.querySelector("#generate").addEventListener("click", () => {
+        setButtonsDisabled(true);
         const rows = document.querySelector("#rows").value;
         const cols = document.querySelector("#cols").value;
         controller.initGraph(rows, cols);
     });
+    document.querySelector("#solveAStar").addEventListener("click", () => {
+        //setButtonsDisabled(true);
+        controller.solveAStar();
+    });
+
+    document.querySelector("#solveBFS").addEventListener("click", () => {
+        //setButtonsDisabled(true);
+        controller.solveBFS();
+    });
 }
 
-export { renderMaze, updateMaze, attatchEventListeners };
+function setButtonsDisabled(bool) {
+    document.querySelector("#solveBFS").disabled = bool;
+    document.querySelector("#solveAStar").disabled = bool;
+}
+
+export { renderMaze, updateMaze, attatchEventListeners, setButtonsDisabled, updateAStarCycles, updateBFSCycles };

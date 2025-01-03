@@ -1,5 +1,7 @@
 import Graph from "./model/graph.js";
 import Stack from "./model/stack.js";
+import Queue from "./model/queue.js";
+import PriorityQueue from "./model/minheap.js";
 import * as view from "./view.js";
 window.addEventListener("load", main);
 
@@ -17,7 +19,7 @@ async function initGraph(rows, cols) {
     view.renderMaze(graph);
     await wilsonsAlgorithm();
     setStartAndGoal();
-    console.log(graph.getNeighbourNodes('0,1'));      
+    view.setButtonsDisabled(false);
 }
 
 /* ----------------- WILSONS ALGORITHM START --------------- */ 
@@ -106,11 +108,120 @@ async function finalizeWalk(path, unvisited) {
 /* ----------------- WILSONS ALGORITHM END --------------- */ 
 
 /* ----------------- A* ALGORITHM START --------------- */
-//todo: implement a* algorithm
+async function solveAStar() {
+    reset();
+    const start = graph.getStartNode();
+    const goal = graph.getGoalNode();
+    await aStar(start, goal, manhattanDistance);
+}
+
+async function reconstructPath(cameFrom, current) {
+    const path = new Stack();
+    path.push(current);
+
+    while (cameFrom.has(current)) {
+        current = cameFrom.get(current);
+        path.push(current);
+
+        current.partOfPath = true;
+        changedCells.add(current);
+        updateMaze();
+
+        await sleep(50);
+    }
+
+    return path;
+}
+
+async function aStar(start, goal, heuristic) {
+    const openSet = new PriorityQueue();
+    start.fScore = heuristic(start, goal);
+    openSet.insert(start);
+
+    const cameFrom = new Map();
+
+    let cycles = 0;
+    while(openSet.size > 0) {
+        const current = openSet.remove();
+        current.partOfSearch = true;
+        changedCells.add(current);
+        updateMaze();
+        await sleep(50);
+
+        cycles++;
+        view.updateAStarCycles(cycles);
+
+        if(current === goal) {
+            return reconstructPath(cameFrom, current);
+        }
+        
+        for(const neighbour of graph.getNeighbourNodes(current.id)) {
+            const tentativeGScore = current.gScore + current.weight;
+            
+            if(tentativeGScore < neighbour.gScore) {
+                cameFrom.set(neighbour, current);
+                neighbour.gScore = tentativeGScore;
+                neighbour.fScore = neighbour.gScore + heuristic(neighbour, goal);
+                
+                if(!openSet.contains(neighbour)) {
+                    openSet.insert(neighbour);
+                }
+            }
+        }
+    }
+
+    return null;
+
+}
+
+function manhattanDistance(node, goal) {
+    return Math.abs(node.x - goal.x) + Math.abs(node.y - goal.y);
+}
+
 /* ----------------- A* ALGORITHM END --------------- */
 
 /* ----------------- BFS ALGORITHM START --------------- */
 //todo: implement bfs algorithm
+
+async function solveBFS() {
+    reset();
+    const start = graph.getStartNode();
+    const goal = graph.getGoalNode();
+    await BFS(start, goal);
+}
+
+async function BFS(current, goal) {
+    const queue = new Queue();
+    queue.add(current);
+    const cameFrom = new Map();
+
+    let cycles = 0;
+    while(queue.size() > 0) {
+        current = queue.dequeue();
+        current.partOfSearch = true;
+        changedCells.add(current);
+        updateMaze();
+        await sleep(50);
+
+        cycles++;
+        view.updateBFSCycles(cycles);
+        if(current === goal) {
+            console.log("Goal found!");
+            return reconstructPath(cameFrom, current);
+        }
+
+        for(const neighbour of graph.getNeighbourNodes(current.id)) {
+            if(!cameFrom.has(neighbour)) {
+                neighbour.partOfSearch = true;
+                changedCells.add(neighbour);
+                updateMaze();
+                cameFrom.set(neighbour, current);
+                queue.add(neighbour);
+            }
+        }
+    }
+}
+
 /* ----------------- BFS ALGORITHM END --------------- */
 
 /* ----------------- HELPERS START --------------- */ 
@@ -148,12 +259,28 @@ function setStartAndGoal() {
         goal = graph.getNode(goalCol, graph.rows - 1);
     }
     start.start = true;
+    //for A* algorithm
+    start.gScore = 0;
     goal.goal = true;
     changedCells.add(start);
     changedCells.add(goal);
     updateMaze();
 }
 
+function reset() {
+    for (const node of graph.nodes.values()) {
+        if(node.partOfPath || node.partOfSearch) {
+            node.gScore = Infinity;
+            node.fScore = Infinity;
+            node.partOfSearch = false;
+            node.partOfPath = false;
+            if(node.start) node.gScore = 0;
+            changedCells.add(node);
+        }
+    }
+    updateMaze();
+}
+
 /* ----------------- HELPERS END --------------- */
 
-export {initGraph}
+export {initGraph, solveAStar, solveBFS};

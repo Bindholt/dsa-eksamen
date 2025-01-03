@@ -7,7 +7,7 @@
     <title>Maze</title>
 </head>
 <body>
-    <h1>Maze</h1>
+    <h1>Maze building and Pathfinding algorithms</h1>
     <div class="flex">
         <div>Rows: </div>
         <input type="number" value="0" id="rows">
@@ -15,10 +15,21 @@
         <input type="number" value="0" id="cols">
         <br>
         <button id="generate">Generate Maze</button>
+        <button id="solveAStar" disabled>Solve with A*</button>
         <button id="solveBFS" disabled>Solve with BFS</button>
-        <button id="solveAstar" disabled>Solve with A*</button>
-        
+
+        <div class="algo-box">
+            <h3>A*</h3>
+            <h4 id="a-star-cycles">Cycles:</h4>
+        </div>
+
+        <div class="algo-box">
+            <h3>BFS</h3>
+            <h4 id="bfs-cycles">Cycles:</h4>
+        </div>
+
     </div>
+
     <div id="maze">
 
     </div>

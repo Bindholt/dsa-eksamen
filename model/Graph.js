@@ -55,7 +55,6 @@ export default class Lattice2DGraph {
         return this.edges.get(nodeId);
     }
 
-
     getRandomGridNeighbourNode(x, y) {
         const directions = [
             {dx: -1, dy: 0},
@@ -75,6 +74,22 @@ export default class Lattice2DGraph {
         const neighbourY = y + randomDirection.dy;
     
         return this.nodes.get(`${neighbourX},${neighbourY}`);
+    }
+
+    getStartNode() {
+        for (const node of this.nodes.values()) {
+            if (node.start) {
+                return node;
+            }
+        }
+    }
+
+    getGoalNode() {
+        for (const node of this.nodes.values()) {
+            if (node.goal) {
+                return node;
+            }
+        }
     }
 
     dumpNodes() {
@@ -104,6 +119,8 @@ class Node {
     gScore;
     fScore;
     weight;
+    partOfSearch;
+    partOfPath;
     
     constructor(x, y) {
         this.id = `${x},${y}`;  
@@ -111,6 +128,8 @@ class Node {
         this.y = y;
         this.partOfWalk = false;
         this.partOfMaze = false;
+        this.partOfSearch = false;
+        this.partOfPath = false;
         this.start = false;
         this.goal = false;
         this.weight = 1;

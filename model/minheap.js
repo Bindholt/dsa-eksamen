@@ -11,7 +11,6 @@ export default class MinHeap {
         this.heap.push(data);
         this.size++;
         this.heapifyUp();
-
     }
 
     remove() {
@@ -33,6 +32,10 @@ export default class MinHeap {
 
     peek() {
         return this.heap[0];
+    }
+
+    contains(data) {
+        return this.heap.includes(data);
     }
 
     heapifyUp() {
