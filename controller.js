@@ -17,6 +17,7 @@ async function initGraph(rows, cols) {
     view.renderMaze(graph);
     await wilsonsAlgorithm();
     setStartAndGoal();
+    console.log(graph.getNeighbourNodes('0,1'));      
 }
 
 /* ----------------- WILSONS ALGORITHM START --------------- */ 
@@ -49,7 +50,7 @@ async function performRandomWalk(currentCell) {
 
         updateMaze();
 
-        currentCell = graph.getRandomNeighbour(currentCell.x, currentCell.y);
+        currentCell = graph.getRandomGridNeighbourNode(currentCell.x, currentCell.y);
         await sleep(10);
     }
 

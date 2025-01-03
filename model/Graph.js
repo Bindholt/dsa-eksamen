@@ -21,13 +21,6 @@ export default class Lattice2DGraph {
         }
     }
 
-    createEdges() {
-        for(const node of this.nodes.values()) {
-            const neighbours = this.getNeighbours(node);
-            this.edges.set(node.id, neighbours);
-        }
-    }
-
     createEdge(nodeId, neighbourId) {
         let neighbours = this.edges.get(nodeId);
         if (!neighbours) {
@@ -47,28 +40,23 @@ export default class Lattice2DGraph {
         return this.nodes.get(`${x},${y}`);
     }
 
-    getNeighbours({x,y}) {
+    getNeighbourNodes(nodeId) {
         const neighbours = [];
-        const directions = {
-            left: {dx: -1, dy: 0},
-            right: {dx: 1, dy: 0},
-            up: {dx: 0, dy: -1},
-            down: {dx: 0, dy: 1}
-        }
-
-        for (const direction in directions) {
-            const {dx, dy} = directions[direction];
-            const neighbourX = x + dx;
-            const neighbourY = y + dy;
-            if (neighbourX >= 0 && neighbourX < this.cols && neighbourY >= 0 && neighbourY < this.rows) {
-                neighbours.push(this.nodes.get(`${neighbourX},${neighbourY}`));
+        const connectedNodes = this.getNeighbourIDs(nodeId);
+        if (connectedNodes) {
+            for (const neighbourId of connectedNodes) {
+                neighbours.push(this.nodes.get(neighbourId));
             }
         }
-
         return neighbours;
     }
 
-    getRandomNeighbour(x, y) {
+    getNeighbourIDs(nodeId) {
+        return this.edges.get(nodeId);
+    }
+
+
+    getRandomGridNeighbourNode(x, y) {
         const directions = [
             {dx: -1, dy: 0},
             {dx: 1, dy: 0},
@@ -88,11 +76,6 @@ export default class Lattice2DGraph {
     
         return this.nodes.get(`${neighbourX},${neighbourY}`);
     }
-    
-
-    getNodeNeighbors(nodeId) {
-        return this.edges.get(nodeId);
-    }
 
     dumpNodes() {
         for (const node of this.nodes.values()) {
@@ -111,10 +94,12 @@ class Node {
     id;
     x;
     y;
-    partOfWalk;
-    partOfMaze;
     start;
     goal;
+    //Wilsons Algorithm
+    partOfWalk;
+    partOfMaze;
+    //A* Algorithm
     weight;
     gScore;
     fScore;
