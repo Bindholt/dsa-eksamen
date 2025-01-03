@@ -12,10 +12,11 @@ function main() {
     window.graph = graph;
 }
 
-function initGraph(rows, cols) {
+async function initGraph(rows, cols) {
     graph = new Graph(rows, cols);
     view.renderMaze(graph);
-    wilsonsAlgorithm();
+    await wilsonsAlgorithm();
+    setStartAndGoal();
 }
 
 /* ----------------- WILSONS ALGORITHM START --------------- */ 
@@ -133,6 +134,23 @@ function sleep(ms) {
 function updateMaze() {
     view.updateMaze(graph, changedCells);
     changedCells.clear();
+}
+
+function setStartAndGoal() {
+    const start = graph.getNode(0,0);
+    let goal;
+    if (Math.random() < 0.5) {
+        const goalRow = Math.floor(Math.random() * graph.rows);
+        goal = graph.getNode(graph.cols - 1, goalRow);
+    } else {
+        const goalCol = Math.floor(Math.random() * graph.cols);
+        goal = graph.getNode(goalCol, graph.rows - 1);
+    }
+    start.start = true;
+    goal.goal = true;
+    changedCells.add(start);
+    changedCells.add(goal);
+    updateMaze();
 }
 
 /* ----------------- HELPERS END --------------- */

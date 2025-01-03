@@ -20,8 +20,6 @@ function renderMaze(graph) {
 }
 
 function updateMaze(graph, updatedCells) {
-    console.log("updateMaze");
-    console.log(updatedCells);
     for (const { y:row, x:col } of updatedCells) {
         const cell = graph.getNode(col, row); 
         const cellDiv = document.querySelector("#id" + cell.id.replace(",", "-")); 
@@ -46,6 +44,8 @@ function updateCell(graph, cell, cellDiv) {
 
     if(cell.partOfMaze) cellDiv.classList.add("partOfMaze");
     if(cell.partOfWalk) cellDiv.classList.add("partOfWalk");
+    if(cell.start) cellDiv.classList.add("start");
+    if(cell.goal) cellDiv.classList.add("goal");
 
     if (!cellEdges) {
         cellDiv.classList.add(...directions.map(d => d.name));

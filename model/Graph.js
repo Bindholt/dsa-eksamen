@@ -105,8 +105,6 @@ export default class Lattice2DGraph {
             console.log(node, neighbours);
         }
     }
-
-
 }
 
 class Node {
@@ -115,11 +113,23 @@ class Node {
     y;
     partOfWalk;
     partOfMaze;
+    start;
+    goal;
+    weight;
+    gScore;
+    fScore;
+    weight;
+    
     constructor(x, y) {
         this.id = `${x},${y}`;  
         this.x = x;
         this.y = y;
         this.partOfWalk = false;
         this.partOfMaze = false;
+        this.start = false;
+        this.goal = false;
+        this.weight = 1;
+        this.gScore = Infinity;
+        this.fScore = Infinity;
     }
 }

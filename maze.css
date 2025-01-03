@@ -40,15 +40,6 @@
 .visited {
     background-color: lightblue;
 }
-
-.start {
-    background-color: green;
-}
-
-.goal {
-    background-color: red;
-}
-
 .path {
     background-color: plum;
 }
@@ -73,4 +64,13 @@ button {
 
 .partOfWalk {
     background-color: lightblue;
+}
+
+
+.start {
+    background-color: green;
+}
+
+.goal {
+    background-color: red;
 }
