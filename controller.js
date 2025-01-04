@@ -9,19 +9,16 @@ let graph;
 const changedCells = new Set();
 
 function main() {
-    view.attatchEventListeners();
-    window.wilsonsAlgorithm = wilsonsAlgorithm;
+    view.init();
 }
 
 async function initGraph(rows, cols) {
+    view.displayHiddenElements();
     graph = new Graph(rows, cols);
     view.renderMaze(graph);
     await wilsonsAlgorithm();
     setStartAndGoal();
     view.setButtonsDisabled(false);
-    window.graph = graph;
-    window.PriorityQueue = PriorityQueue;
-    window.changedCells = changedCells;
 }
 
 function changeWeight(node) {

@@ -109,7 +109,7 @@ button {
     gap: 0.5em;
 }
 
-.algo-box {
+.algo-info {
     background-color: rgb(234, 234, 234);
     padding-left: 0.5em;
     width: 20em;
@@ -170,4 +170,8 @@ button:disabled {
     text-align: right;
     bottom: 0;
     right: 0;
+}
+
+.hidden {
+    display: none;
 }

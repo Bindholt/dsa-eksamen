@@ -88,7 +88,7 @@ function updateCell(graph, cell, cellDiv) {
     }
 }
 
-function attatchEventListeners() {
+function init() {
     document.querySelector("#generate").addEventListener("click", () => {
         setButtonsDisabled(true);
         const rows = document.querySelector("#rows").value;
@@ -117,7 +117,9 @@ function attatchEventListeners() {
 
     document.querySelector("#single-step").addEventListener("click", () => {
         controller.singleStep();
-    })
+    });
+
+    document.querySelector("#rows").select();
 }
 
 function setButtonsDisabled(bool) {
@@ -129,4 +131,10 @@ function toggleStepByStepButton(bool) {
     document.querySelector("#single-step").disabled = bool;
 }
 
-export { renderMaze, updateMaze, attatchEventListeners, setButtonsDisabled, updateAStarExplorationCost, updateBFSExplorationCost, updateWeight, toggleStepByStepButton };
+function displayHiddenElements() {
+    document.querySelectorAll(".hidden").forEach((element) => {
+        element.classList.remove("hidden");
+    });
+}
+
+export { renderMaze, updateMaze, init, setButtonsDisabled, updateAStarExplorationCost, updateBFSExplorationCost, updateWeight, toggleStepByStepButton, displayHiddenElements };
