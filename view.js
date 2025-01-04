@@ -11,8 +11,14 @@ function renderMaze(graph) {
             const cellDiv = document.createElement("div");
             const cell = graph.getNode(col, row); 
             cellDiv.id = "id" + cell.id.replace(",", "-");
+            cellDiv.addEventListener("click", () => {
+                controller.changeWeight(cell);
+            });
+            const cellWeight = document.createElement("div");
+            cellWeight.textContent = cell.weight;
+            cellWeight.className = "cell-weight";
+            cellDiv.appendChild(cellWeight);
             updateCell(graph, cell, cellDiv);
-
             rowDiv.appendChild(cellDiv);
         }
         mazeDiv.appendChild(rowDiv);
@@ -29,12 +35,17 @@ function updateMaze(graph, updatedCells) {
     }
 }
 
-function updateAStarCycles(cycles) {
-    document.querySelector("#a-star-cycles").textContent = "Cycles: " + cycles;
+function updateWeight(node) {
+    const cellDiv = document.querySelector("#id" + node.id.replace(",", "-"));
+    cellDiv.querySelector(".cell-weight").textContent = node.weight;
 }
 
-function updateBFSCycles(cycles) {
-    document.querySelector("#bfs-cycles").textContent = "Cycles: " + cycles;
+function updateAStarExplorationCost(explorationCost) {
+    document.querySelector("#a-star-exploration-cost").textContent = "Exploration cost: " + explorationCost;
+}
+
+function updateBFSExplorationCost(explorationCost) {
+    document.querySelector("#bfs-exploration-cost").textContent = "Exploration cot: " + explorationCost;
 }
 
 function updateCell(graph, cell, cellDiv) {
@@ -100,4 +111,4 @@ function setButtonsDisabled(bool) {
     document.querySelector("#solveAStar").disabled = bool;
 }
 
-export { renderMaze, updateMaze, attatchEventListeners, setButtonsDisabled, updateAStarCycles, updateBFSCycles };
+export { renderMaze, updateMaze, attatchEventListeners, setButtonsDisabled, updateAStarExplorationCost, updateBFSExplorationCost, updateWeight };

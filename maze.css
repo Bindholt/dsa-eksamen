@@ -1,5 +1,7 @@
 
 
+
+
 #grid {
     display: grid;
     grid-template-columns: repeat(var(--grid-cols)1fr);
@@ -7,6 +9,11 @@
     gap: 0;
 }
 
+#maze {
+    max-height: fit-content; 
+    max-width: fit-content;
+    margin: 0 auto; 
+}
 #maze > div {
     display: flex;
     justify-content: center;
@@ -15,6 +22,7 @@
 
 .flex {
     display: flex;
+    
 }
 
 .column {
@@ -149,4 +157,13 @@ button:hover {
     background-color: white; /* White background for clarity */
     border: 1px solid #ccc;
     padding: 1em;
+}
+
+
+.cell-weight {
+    position: relative;
+    font-size: 0.5em;
+    text-align: right;
+    bottom: 0;
+    right: 0;
 }
