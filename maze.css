@@ -166,7 +166,7 @@ button:disabled {
 
 .cell-weight {
     position: relative;
-    font-size: 0.5em;
+    font-size: 1em;
     text-align: right;
     bottom: 0;
     right: 0;
