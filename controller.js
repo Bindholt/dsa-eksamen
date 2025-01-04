@@ -8,12 +8,6 @@ window.addEventListener("load", main);
 let graph;
 const changedCells = new Set();
 
-const animationManager = {
-    isPaused: false,
-    resolveStep: null,
-    delayMs: 50
-}
-
 function main() {
     view.attatchEventListeners();
     window.wilsonsAlgorithm = wilsonsAlgorithm;
@@ -27,6 +21,7 @@ async function initGraph(rows, cols) {
     view.setButtonsDisabled(false);
     window.graph = graph;
     window.PriorityQueue = PriorityQueue;
+    window.changedCells = changedCells;
 }
 
 function changeWeight(node) {
@@ -135,7 +130,7 @@ async function solveAStar() {
 async function reconstructPath(cameFrom, current) {
     const path = new Stack();
     path.push(current);
-
+    
     while (cameFrom.has(current)) {
         current = cameFrom.get(current);
         path.push(current);
@@ -169,7 +164,7 @@ async function aStar(start, goal, heuristic) {
         view.updateAStarExplorationCost(explorationCost);
 
         if(current === goal) {
-            return reconstructPath(cameFrom, current);
+            return await reconstructPath(cameFrom, current);
         }
         
         for(const neighbour of graph.getNeighbourNodes(current.id)) {
@@ -222,12 +217,11 @@ async function BFS(current, goal) {
         explorationCost += current.weight;
         view.updateBFSExplorationCost(explorationCost);
         if(current === goal) {
-            console.log("Goal found!");
-            return reconstructPath(cameFrom, current);
+            return await reconstructPath(cameFrom, current);
         }
 
         for(const neighbour of graph.getNeighbourNodes(current.id)) {
-            if(!cameFrom.has(neighbour)) {
+            if(!neighbour.partOfSearch) {
                 neighbour.partOfSearch = true;
                 changedCells.add(neighbour);
                 updateMaze();
@@ -242,6 +236,45 @@ async function BFS(current, goal) {
 
 /* ----------------- HELPERS START --------------- */ 
 
+const animationManager = {
+    isPaused: false,
+    singleStep: false,
+    delayMs: 30,
+    speed: "5"
+}
+
+function togglePlay() {
+    animationManager.isPaused = !animationManager.isPaused;
+    view.toggleStepByStepButton(!animationManager.isPaused);
+}
+
+function reduceDelay() {
+    animationManager.delayMs /= 2;
+    return ++animationManager.speed;
+}
+
+function increaseDelay() {
+    animationManager.delayMs *= 2;
+    return --animationManager.speed;
+}
+
+function singleStep() {
+    animationManager.singleStep = true;
+}
+
+async function sleep() {
+    while (animationManager.isPaused) {
+        if (animationManager.singleStep) {
+            animationManager.singleStep = false;
+            return new Promise((resolve) => setTimeout(resolve, 10));
+        }
+        await new Promise((r) => setTimeout(r, 10)); 
+    }
+
+    return new Promise((resolve) => setTimeout(resolve, animationManager.delayMs));
+}
+
+
 function getRandomElementFromSet(set) {
     const length = set.size;
     const randomIndex = Math.floor(Math.random() * length);
@@ -255,21 +288,7 @@ function getRandomElementFromSet(set) {
     }
 }
 
-async function sleep() {
-    while (animationManager.isPaused && !animationManager.stepMode) {
-        await new Promise((r) => setTimeout(r, 10)); 
-    }
 
-    if (animationManager.stepMode) {
-        animationManager.resolveStep = new Promise((r) => {
-            animationManager._resolve = r;
-        });
-        await animationManager.resolveStep;
-        animationManager.stepMode = false; // Reset step mode after stepping
-    }
-
-    return new Promise((resolve) => setTimeout(resolve, animationManager.delayMs));
-}
 function updateMaze() {
     view.updateMaze(graph, changedCells);
     changedCells.clear();
@@ -296,18 +315,17 @@ function setStartAndGoal() {
 
 function reset() {
     for (const node of graph.nodes.values()) {
-        if(node.partOfPath || node.partOfSearch) {
-            node.gScore = Infinity;
-            node.fScore = Infinity;
-            node.partOfSearch = false;
-            node.partOfPath = false;
-            if(node.start) node.gScore = 0;
-            changedCells.add(node);
-        }
+        node.gScore = Infinity;
+        node.fScore = Infinity;
+        node.partOfSearch = false;
+        node.partOfPath = false;
+        if(node.start) node.gScore = 0;
+        changedCells.add(node);
     }
     updateMaze();
 }
 
+
 /* ----------------- HELPERS END --------------- */
 
-export {initGraph, solveAStar, solveBFS, changeWeight};
+export {initGraph, solveAStar, solveBFS, changeWeight, togglePlay, reduceDelay, increaseDelay, singleStep};

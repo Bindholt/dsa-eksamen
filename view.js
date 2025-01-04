@@ -95,20 +95,38 @@ function attatchEventListeners() {
         const cols = document.querySelector("#cols").value;
         controller.initGraph(rows, cols);
     });
-    document.querySelector("#solveAStar").addEventListener("click", () => {
-        //setButtonsDisabled(true);
+    document.querySelector("#solve-a-star").addEventListener("click", () => {
         controller.solveAStar();
     });
 
-    document.querySelector("#solveBFS").addEventListener("click", () => {
-        //setButtonsDisabled(true);
+    document.querySelector("#solve-bfs").addEventListener("click", () => {
         controller.solveBFS();
     });
+
+    document.querySelector("#toggle-play").addEventListener("click", () => {
+        controller.togglePlay();
+    });
+
+    document.querySelector("#reduce-delay").addEventListener("click", () => {
+        document.querySelector("#speed").textContent = controller.reduceDelay();
+    }); 
+
+    document.querySelector("#increase-delay").addEventListener("click", () => {
+        document.querySelector("#speed").textContent = controller.increaseDelay();
+    });
+
+    document.querySelector("#single-step").addEventListener("click", () => {
+        controller.singleStep();
+    })
 }
 
 function setButtonsDisabled(bool) {
-    document.querySelector("#solveBFS").disabled = bool;
-    document.querySelector("#solveAStar").disabled = bool;
+    document.querySelector("#solve-bfs").disabled = bool;
+    document.querySelector("#solve-a-star").disabled = bool;
 }
 
-export { renderMaze, updateMaze, attatchEventListeners, setButtonsDisabled, updateAStarExplorationCost, updateBFSExplorationCost, updateWeight };
+function toggleStepByStepButton(bool) {
+    document.querySelector("#single-step").disabled = bool;
+}
+
+export { renderMaze, updateMaze, attatchEventListeners, setButtonsDisabled, updateAStarExplorationCost, updateBFSExplorationCost, updateWeight, toggleStepByStepButton };

@@ -147,8 +147,12 @@ button:hover {
     cursor: pointer;
 }
 
+button:disabled {
+    pointer-events: none;
+    opacity: 0.5; 
+}
 
-#delay {
+#speed {
     min-width: 40px;
     text-align: center;
     font-size: 14px;
