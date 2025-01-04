@@ -8,6 +8,13 @@ window.addEventListener("load", main);
 let graph;
 const changedCells = new Set();
 
+const animationManager = {
+    isPaused: false,
+    stepMode: false,
+    resolveStep: null,
+    delayMs: 50
+}
+
 function main() {
     view.attatchEventListeners();
     window.wilsonsAlgorithm = wilsonsAlgorithm;
@@ -53,7 +60,7 @@ async function performRandomWalk(currentCell) {
         updateMaze();
 
         currentCell = graph.getRandomGridNeighbourNode(currentCell.x, currentCell.y);
-        await sleep(10);
+        await sleep();
     }
 
     pathStack.push(currentCell);
@@ -102,7 +109,7 @@ async function finalizeWalk(path, unvisited) {
         previous = data;
         current = current.next;
         updateMaze();
-        await sleep(30);
+        await sleep();
     }
 }
 /* ----------------- WILSONS ALGORITHM END --------------- */ 
@@ -127,7 +134,7 @@ async function reconstructPath(cameFrom, current) {
         changedCells.add(current);
         updateMaze();
 
-        await sleep(50);
+        await sleep();
     }
 
     return path;
@@ -146,7 +153,7 @@ async function aStar(start, goal, heuristic) {
         current.partOfSearch = true;
         changedCells.add(current);
         updateMaze();
-        await sleep(50);
+        await sleep();
 
         cycles++;
         view.updateAStarCycles(cycles);
@@ -201,7 +208,7 @@ async function BFS(current, goal) {
         current.partOfSearch = true;
         changedCells.add(current);
         updateMaze();
-        await sleep(50);
+        await sleep();
 
         cycles++;
         view.updateBFSCycles(cycles);
@@ -239,9 +246,23 @@ function getRandomElementFromSet(set) {
     }
 }
 
-function sleep(ms) {
-    return new Promise((r) => setTimeout(r, ms));
+async function sleep() {
+    while (animationManager.isPaused && !animationManager.stepMode) {
+        await new Promise((r) => setTimeout(r, 10)); 
+    }
+
+    if (animationManager.stepMode) {
+        animationManager.resolveStep = new Promise((r) => {
+            animationManager._resolve = r;
+        });
+        await animationManager.resolveStep;
+        animationManager.stepMode = false; // Reset step mode after stepping
+    }
+
+    return new Promise((resolve) => setTimeout(resolve, animationManager.delayMs));
 }
+
+
 
 function updateMaze() {
     view.updateMaze(graph, changedCells);

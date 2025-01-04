@@ -13,6 +13,20 @@
     align-items: center;
 }
 
+.flex {
+    display: flex;
+}
+
+.column {
+    flex-direction: column;
+    
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+}
+
 .cell {
     border: 1px dotted lightgrey;
     aspect-ratio: 1/1;
@@ -40,14 +54,13 @@
 .visited {
     background-color: lightblue;
 }
+
 .path {
     background-color: plum;
 }
 
 
-.flex {
-    display: flex;
-    flex-direction: column;
+.left-panel{
     height: 1em;
     width: 10em; 
     gap: 0.5em;
@@ -92,4 +105,48 @@ button {
     background-color: rgb(234, 234, 234);
     padding-left: 0.5em;
 
+}
+
+.control-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;      /* Spacing from the maze */
+}
+
+/* Speed Controls Group */
+.control-panel div {
+    display: flex;
+    gap: 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+button {
+    border: 1px solid #ccc;
+    padding: 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #b8b8b8;
+    cursor: pointer;
+}
+
+
+#delay {
+    min-width: 40px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    background-color: white; /* White background for clarity */
+    border: 1px solid #ccc;
+    padding: 1em;
 }

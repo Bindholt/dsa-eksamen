@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Maze building and Pathfinding algorithms</h1>
-    <div class="flex">
+    <div class="left-panel flex column">
         <div>Rows: </div>
         <input type="number" value="0" id="rows">
         <div>Columns: </div>
@@ -29,10 +29,25 @@
         </div>
 
     </div>
+    <div>
+        <div class="flex column center">
+                <div class="control-panel">
+                    <div>
+                        <button id="toggle-play">⏯️</button>
+                        <button id="single-step" disabled>➡️</button>
+                    </div>
+                    <div>
+                        <button id="increment-delay">⏪</button>
+                        <div id="delay">1</div> <!-- Delay Display -->
+                        <button id="decrement-delay">⏩</button> <!-- Speed Up Icon -->
+                    </div>
+                </div>
+        </div>
+        <div id="maze" class="flex column">
 
-    <div id="maze">
-
+        </div>  
     </div>
+
 
     <script type="module" src="controller.js"></script>
 
