@@ -3,7 +3,7 @@ Vinter 2024/2025
 Lavet af Christian Bindholt
 
 ![Maze picture](./images/maze.png)
-![Exploration cost picture](./images/eksempel.jpg)
+![Exploration cost picture](./images/maze.png)
  
 Github repository: https://github.com/Bindholt/dsa-eksamen/ 
 Deployet udgave: https://bindholt.github.io/dsa-eksamen/
