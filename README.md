@@ -1,14 +1,14 @@
-#DSA eksamen: Maze Generation and Pathfinding
+# DSA eksamen: Maze Generation and Pathfinding
 Vinter 2024/2025
 Lavet af Christian Bindholt
 
 ![Maze picture](./images/maze.png)
-![Exploration cost picture](./images/maze.png)
+![Exploration cost picture](./images/exploration-cost.png)
  
 Github repository: https://github.com/Bindholt/dsa-eksamen/ 
 Deployet udgave: https://bindholt.github.io/dsa-eksamen/
 
-##Maze Generation and Pathfinding
+## Maze Generation and Pathfinding
 Jeg har lavet en grid-repræsenteret visualisering af labyrint generation og løsning af labyrinter. 
 Man kan angive hvor mange rækker (Rows), og kolonner (Columns) ens labyrint skal fylde, og efter at trykke på ”Generate Maze” knappen, vil den generere  en tilfældig labyrint ved hjælp af Wilson’s Algorithm.
 Når den har lavet labyrinten, placerer den en start til labyrinten, og et mål.
