@@ -1,5 +1,6 @@
 # DSA eksamen: Maze Generation and Pathfinding
 Vinter 2024/2025
+
 Lavet af Christian Bindholt
 
 ![Maze picture](./images/maze.png)
