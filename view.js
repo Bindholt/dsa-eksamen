@@ -45,7 +45,7 @@ function updateAStarExplorationCost(explorationCost) {
 }
 
 function updateBFSExplorationCost(explorationCost) {
-    document.querySelector("#bfs-exploration-cost").textContent = "Exploration cot: " + explorationCost;
+    document.querySelector("#bfs-exploration-cost").textContent = "Exploration cost: " + explorationCost;
 }
 
 function updateCell(graph, cell, cellDiv) {

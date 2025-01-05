@@ -1,39 +1,31 @@
 export default class MinHeap {
     heap;
     indexMap;
-    size;
 
     constructor() {
         this.heap = [];
         this.indexMap = new Map();
-        this.size = 0;
     }
     
     insert(data) {
         this.heap.push(data);
-        this.indexMap.set(data.id, this.size);
-        this.size++;
+        this.indexMap.set(data.id, this.heap.length-1);
         this.heapifyUp();
     }
 
     remove() {
-        if (this.size === 0) {
-            return null;
-        }
+        if (this.heap.length === 0) return null;
 
-        if (this.size === 1) {
+        if (this.heap.length === 1) {
             const data = this.heap.pop();
             this.indexMap.delete(data.id);
-            this.size--;
             return data;
         }
 
-        const root = this.heap[0];
-        this.heap[0] = this.heap.pop();
-        this.size--;
-        this.indexMap.delete(root.id);
-        if(this.size > 0) {
-            this.indexMap.set(this.heap[0].id, 0);
+        const root = this.heap[0]; //save our root (min value) to return later
+        this.heap[0] = this.heap.pop(); //replace root node with last node, to maintain complete tree
+        this.indexMap.delete(root.id); 
+        if(this.heap.length > 0) {
             this.heapifyDown();
         }
         return root;
@@ -43,12 +35,16 @@ export default class MinHeap {
         return this.heap[0];
     }
 
+    size() {
+        return this.heap.length;
+    }
+
     contains(data) {
         return this.indexMap.has(data.id);
     }
 
     heapifyUp() {
-        let current = this.size-1;
+        let current = this.heap.length-1;
         let parent = this.parentIndex(current);
 
         while(current > 0 && this.heap[current].priority < this.heap[parent].priority) {
@@ -63,10 +59,10 @@ export default class MinHeap {
         let leftChild = this.leftChildIndex(current);
         let rightChild = this.rightChildIndex(current);
 
-        while(leftChild < this.size) {
+        while(leftChild < this.heap.length) {
             let smallestChild;
 
-            if(rightChild < this.size && this.heap[rightChild].priority < this.heap[leftChild].priority) {
+            if(rightChild < this.heap.length && this.heap[rightChild].priority < this.heap[leftChild].priority) {
                 smallestChild = rightChild;
             } else {
                 smallestChild = leftChild;

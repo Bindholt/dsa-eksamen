@@ -64,7 +64,6 @@ async function performRandomWalk(currentCell) {
         currentCell = graph.getRandomGridNeighbourNode(currentCell.x, currentCell.y);
         await sleep();
     }
-
     pathStack.push(currentCell);
 
     return pathStack;
@@ -86,7 +85,6 @@ function eraseLoop(target, stack) {
     }
 
     stack.head = current;
-    
 }
 
 async function finalizeWalk(path, unvisited) {
@@ -144,13 +142,14 @@ async function reconstructPath(cameFrom, current) {
 
 async function aStar(start, goal, heuristic) {
     const openSet = new PriorityQueue();
+    start.gScore = 0;
     start.fScore = heuristic(start, goal);
     openSet.insert({node: start, priority: start.fScore});
 
     const cameFrom = new Map();
 
     let explorationCost = 0;
-    while(openSet.size > 0) {
+    while(openSet.size() > 0) {
         const current = openSet.remove().node;
         current.partOfSearch = true;
         changedCells.add(current);
@@ -165,7 +164,7 @@ async function aStar(start, goal, heuristic) {
         }
         
         for(const neighbour of graph.getNeighbourNodes(current.id)) {
-            const tentativeGScore = current.gScore + current.weight;
+            const tentativeGScore = current.gScore + neighbour.weight;
             
             if(tentativeGScore < neighbour.gScore) {
                 cameFrom.set(neighbour, current);
@@ -180,7 +179,6 @@ async function aStar(start, goal, heuristic) {
     }
 
     return null;
-
 }
 
 function manhattanDistance(node, goal) {
@@ -200,7 +198,7 @@ async function solveBFS() {
 
 async function BFS(current, goal) {
     const queue = new Queue();
-    queue.add(current);
+    queue.enqueue(current);
     const cameFrom = new Map();
 
     let explorationCost = 0;
@@ -223,7 +221,7 @@ async function BFS(current, goal) {
                 changedCells.add(neighbour);
                 updateMaze();
                 cameFrom.set(neighbour, current);
-                queue.add(neighbour);
+                queue.enqueue(neighbour);
             }
         }
     }
@@ -271,7 +269,6 @@ async function sleep() {
     return new Promise((resolve) => setTimeout(resolve, animationManager.delayMs));
 }
 
-
 function getRandomElementFromSet(set) {
     const length = set.size;
     const randomIndex = Math.floor(Math.random() * length);
@@ -284,7 +281,6 @@ function getRandomElementFromSet(set) {
         i++;
     }
 }
-
 
 function updateMaze() {
     view.updateMaze(graph, changedCells);
@@ -302,8 +298,6 @@ function setStartAndGoal() {
         goal = graph.getNode(goalCol, graph.rows - 1);
     }
     start.start = true;
-    //for A* algorithm
-    start.gScore = 0;
     goal.goal = true;
     changedCells.add(start);
     changedCells.add(goal);

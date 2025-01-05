@@ -6,12 +6,12 @@ export default class Queue {
     constructor(nodes){
         if(!!nodes) {
             nodes.forEach(node => {
-                this.add(node);
+                this.enqueue(node);
             });
         }
     }
 
-    add(data) {
+    enqueue(data) {
         const node = new Node(data, null);
         if(!this._head) {
             this._head = node;

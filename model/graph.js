@@ -24,10 +24,10 @@ export default class Lattice2DGraph {
     createEdge(nodeId, neighbourId) {
         let neighbours = this.edges.get(nodeId);
         if (!neighbours) {
-            neighbours = [];  // Initialize as an empty array if no neighbors exist.
+            neighbours = []; 
             this.edges.set(nodeId, neighbours);
         }
-        neighbours.push(neighbourId);  // Add the neighbor to the array.
+        neighbours.push(neighbourId); 
     }
     
     getNode(x, y) {
@@ -78,17 +78,13 @@ export default class Lattice2DGraph {
 
     getStartNode() {
         for (const node of this.nodes.values()) {
-            if (node.start) {
-                return node;
-            }
+            if (node.start) return node;
         }
     }
 
     getGoalNode() {
         for (const node of this.nodes.values()) {
-            if (node.goal) {
-                return node;
-            }
+            if (node.goal) return node;
         }
     }
 
@@ -114,11 +110,10 @@ class Node {
     //Wilsons Algorithm
     partOfWalk;
     partOfMaze;
-    //A* Algorithm
+    //A*/BFS Algorithm
     weight;
     gScore;
     fScore;
-    weight;
     partOfSearch;
     partOfPath;
     
@@ -126,12 +121,12 @@ class Node {
         this.id = `${x},${y}`;  
         this.x = x;
         this.y = y;
+        this.start = false;
+        this.goal = false;
         this.partOfWalk = false;
         this.partOfMaze = false;
         this.partOfSearch = false;
         this.partOfPath = false;
-        this.start = false;
-        this.goal = false;
         this.weight = 1;
         this.gScore = Infinity;
         this.fScore = Infinity;
