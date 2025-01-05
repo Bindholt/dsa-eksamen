@@ -6,6 +6,7 @@ Lavet af Christian Bindholt
 ![Exploration cost picture](./images/exploration-cost.png)
  
 Github repository: https://github.com/Bindholt/dsa-eksamen/ 
+
 Deployet udgave: https://bindholt.github.io/dsa-eksamen/
 
 ## Maze Generation and Pathfinding
