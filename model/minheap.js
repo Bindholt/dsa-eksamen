@@ -1,14 +1,17 @@
 export default class MinHeap {
     heap;
+    indexMap;
     size;
 
     constructor() {
         this.heap = [];
+        this.indexMap = new Map();
         this.size = 0;
     }
     
     insert(data) {
         this.heap.push(data);
+        this.indexMap.set(data.id, this.size);
         this.size++;
         this.heapifyUp();
     }
@@ -19,14 +22,20 @@ export default class MinHeap {
         }
 
         if (this.size === 1) {
+            const data = this.heap.pop();
+            this.indexMap.delete(data.id);
             this.size--;
-            return this.heap.pop();
+            return data;
         }
 
         const root = this.heap[0];
         this.heap[0] = this.heap.pop();
         this.size--;
-        this.heapifyDown();
+        this.indexMap.delete(root.id);
+        if(this.size > 0) {
+            this.indexMap.set(this.heap[0].id, 0);
+            this.heapifyDown();
+        }
         return root;
     }
 
@@ -35,7 +44,7 @@ export default class MinHeap {
     }
 
     contains(data) {
-        return this.heap.includes(data);
+        return this.indexMap.has(data.id);
     }
 
     heapifyUp() {
@@ -90,6 +99,9 @@ export default class MinHeap {
         const temp = this.heap[i];
         this.heap[i] = this.heap[j];
         this.heap[j] = temp;
+
+        this.indexMap.set(this.heap[i].id, i);
+        this.indexMap.set(this.heap[j].id, j);
     }
 
 } 
