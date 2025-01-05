@@ -8,7 +8,7 @@ Lavet af Christian Bindholt
  
 Github repository: https://github.com/Bindholt/dsa-eksamen/ 
 
-Deployet udgave: https://bindholt.github.io/dsa-eksamen/
+Deployet udgave: https://bindholt.github.io/dsa-eksamen/ 
 
 ## Maze Generation and Pathfinding
 Jeg har lavet en grid-repræsenteret visualisering af labyrint generation og løsning af labyrinter. 
